@@ -1,0 +1,122 @@
+﻿<!-- Tab: Download Settings -->
+<div id="download-tab" class="tab-content">
+    <div class="card">
+        <h2>Download Settings</h2>
+        <form id="downloadForm">
+            <div class="form-group">
+                <label for="outputFormat">Output Format</label>
+                <select id="outputFormat" name="output_format" onchange="updateQualityPresets()">
+                    <option value="mp3">MP3 (Lossy)</option>
+                    <option value="opus">Opus (Lossy, Modern)</option>
+                    <option value="aac">AAC/M4A (Lossy)</option>
+                    <option value="ogg">OGG Vorbis (Lossy)</option>
+                    <option value="flac">FLAC (Lossless)</option>
+                    <option value="wav">WAV (Uncompressed)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="qualityGroup">
+                <label for="quality">Quality</label>
+                <select id="quality" name="quality">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+                <small id="qualityHelp">Higher quality = larger file size</small>
+            </div>
+
+            <!-- Audio Processing Section -->
+            <div class="collapsible-section">
+                <h3 class="collapsible-header collapsed" onclick="toggleSection('audioProcessing')">
+                    <span class="collapse-icon">▶</span> Audio Processing
+                </h3>
+                <div id="audioProcessing" class="collapsible-content">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="normalizeAudio" name="normalize_audio">
+                            Normalize Audio Levels
+                        </label>
+                        <small>Adjust volume to consistent levels across tracks</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="monoAudio" name="mono_audio">
+                            Convert to Mono
+                        </label>
+                        <small>Combine stereo channels into single mono channel (saves space)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sampleRate">Sample Rate</label>
+                        <select id="sampleRate" name="sample_rate">
+                            <option value="original">Original (No Change)</option>
+                            <option value="44100">44.1 kHz (CD Quality)</option>
+                            <option value="48000">48 kHz (DVD Quality)</option>
+                            <option value="96000">96 kHz (High Resolution)</option>
+                            <option value="22050">22.05 kHz (Low Quality)</option>
+                        </select>
+                        <small>Audio sample rate - higher = better quality but larger files</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="removeSilence" name="remove_silence">
+                            Remove Silence
+                        </label>
+                        <small>Trim silence from beginning and end of tracks</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="loudnessNorm" name="loudness_normalization">
+                            Loudness Normalization (EBU R128)
+                        </label>
+                        <small>Professional loudness normalization to -23 LUFS</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="channels">Channels</label>
+                        <select id="channels" name="channels">
+                            <option value="original">Original (Stereo/Mono)</option>
+                            <option value="stereo">Force Stereo</option>
+                            <option value="mono">Force Mono</option>
+                            <option value="5.1">5.1 Surround (if available)</option>
+                        </select>
+                        <small>Channel configuration for output audio</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Management Section -->
+            <div class="collapsible-section">
+                <h3 class="collapsible-header collapsed" onclick="toggleSection('fileManagement')">
+                    <span class="collapse-icon">▶</span> File Management
+                </h3>
+                <div id="fileManagement" class="collapsible-content">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="autoCleanup" name="auto_cleanup">
+                            Auto-cleanup Temporary Files
+                        </label>
+                        <small>Automatically remove temporary download files after conversion</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="embedMetadata" name="embed_metadata">
+                            Embed Metadata Tags
+                        </label>
+                        <small>Include artist, title, album info in file metadata</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="embedThumbnail" name="embed_thumbnail">
+                            Embed Album Art
+                        </label>
+                        <small>Include album artwork in audio files (if available)</small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

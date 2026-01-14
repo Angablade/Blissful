@@ -1,0 +1,666 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Requests - Blissful</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .request-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .auth-section {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .auth-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .auth-button.jellyfin {
+            background: #00a4dc;
+            color: white;
+        }
+
+        .auth-button.emby {
+            background: #52b54b;
+            color: white;
+        }
+
+        .auth-button.plex {
+            background: #e5a00d;
+            color: white;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-section {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover {
+            background: var(--primary-hover);
+        }
+
+        .results-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .artist-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .artist-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .artist-info {
+            padding: 20px;
+        }
+
+        .artist-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .artist-details {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .artist-genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .genre-tag {
+            padding: 4px 10px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .request-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .request-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .request-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logout-button {
+            margin-left: auto;
+            padding: 8px 16px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: #10b981;
+            color: white;
+        }
+
+        .notification.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="request-container">
+        <header>
+            <h1>🎵 Music Requests</h1>
+            <p class="subtitle">Request new artists to be added to the music library</p>
+        </header>
+
+        <!-- Authentication Section -->
+        <div id="auth-section" class="auth-section">
+            <h2>Login Required</h2>
+            <p>Please authenticate with your media server to request music</p>
+            
+            <div class="auth-buttons">
+                <button class="auth-button jellyfin" onclick="showLoginModal('jellyfin')">
+                    🔵 Login with Jellyfin
+                </button>
+                <button class="auth-button emby" onclick="showLoginModal('emby')">
+                    🟢 Login with Emby
+                </button>
+                <button class="auth-button plex" onclick="showLoginModal('plex')">
+                    🟡 Login with Plex
+                </button>
+            </div>
+        </div>
+
+        <!-- User Info (hidden initially) -->
+        <div id="user-section" class="user-info hidden">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div>
+                <div><strong id="username">User</strong></div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Logged in via <span id="auth-provider"></span></div>
+            </div>
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Search Section (hidden initially) -->
+        <div id="search-section" class="search-section hidden">
+            <h2>Search for Artists</h2>
+            <p>Search for artists to request them to be added to the library</p>
+            
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Enter artist name..." onkeypress="handleSearchKeypress(event)">
+                <button onclick="searchArtists()">🔍 Search</button>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading-section" class="loading hidden">
+            <div class="loading-spinner"></div>
+            <p>Searching...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-section"></div>
+
+        <!-- Login Modal -->
+        <div id="login-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 40px; border-radius: 12px; max-width: 400px; width: 90%;">
+                <h2 id="modal-title">Login</h2>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Enter your username and password</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Username</label>
+                        <input type="text" id="login-username" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Password</label>
+                        <input type="password" id="login-password" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" style="flex: 1; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Login</button>
+                        <button type="button" onclick="closeLoginModal()" style="flex: 1; padding: 12px; background: #ccc; color: #333; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAuthProvider = null;
+        let accessToken = null;
+        let currentUsername = null;
+        let requestConfig = null;
+
+        // Check if user is already logged in (from session storage)
+        window.addEventListener('load', async () => {
+            // Load request system configuration
+            await loadRequestConfig();
+            
+            // Check for saved auth
+            const savedAuth = sessionStorage.getItem('blissful_auth');
+            if (savedAuth) {
+                const auth = JSON.parse(savedAuth);
+                accessToken = auth.access_token;
+                currentUsername = auth.username;
+                currentAuthProvider = auth.provider;
+                showAuthenticatedUI();
+            }
+        });
+
+        async function loadRequestConfig() {
+            try {
+                const response = await fetch('/api/request/config');
+                const data = await response.json();
+                
+                if (data.success) {
+                    requestConfig = data;
+                    
+                    // Check if request system is enabled
+                    if (!data.enabled) {
+                        document.getElementById('auth-section').innerHTML = `
+                            <h2>Request System Disabled</h2>
+                            <p style="color: #ef4444;">The music request system is currently disabled by the administrator.</p>
+                            <p>Please contact your administrator to enable this feature.</p>
+                        `;
+                        return;
+                    }
+                    
+                    // Show/hide auth buttons based on configuration
+                    const authButtons = document.querySelector('.auth-buttons');
+                    authButtons.innerHTML = '';
+                    
+                    let hasAnyEnabled = false;
+                    
+                    if (data.jellyfin.enabled && data.jellyfin.url) {
+                        authButtons.innerHTML += `
+                            <button class="auth-button jellyfin" onclick="showLoginModal('jellyfin')">
+                                🔵 Login with Jellyfin
+                            </button>
+                        `;
+                        hasAnyEnabled = true;
+                    }
+                    
+                    if (data.emby.enabled && data.emby.url) {
+                        authButtons.innerHTML += `
+                            <button class="auth-button emby" onclick="showLoginModal('emby')">
+                                🟢 Login with Emby
+                            </button>
+                        `;
+                        hasAnyEnabled = true;
+                    }
+                    
+                    if (data.plex.enabled) {
+                        authButtons.innerHTML += `
+                            <button class="auth-button plex" onclick="showLoginModal('plex')">
+                                🟡 Login with Plex
+                            </button>
+                        `;
+                        hasAnyEnabled = true;
+                    }
+                    
+                    if (!hasAnyEnabled) {
+                        authButtons.innerHTML = `
+                            <p style="color: #ef4444; padding: 20px; background: #fee; border-radius: 8px;">
+                                <strong>⚠️ No authentication methods configured</strong><br>
+                                Please contact your administrator to configure Jellyfin, Emby, or Plex authentication.
+                            </p>
+                        `;
+                    }
+                } else {
+                    showNotification('Failed to load configuration: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error loading request config:', error);
+                showNotification('Failed to load configuration', 'error');
+            }
+        }
+
+        function showLoginModal(provider) {
+            currentAuthProvider = provider;
+            document.getElementById('modal-title').textContent = `Login with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`;
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!username || !password) {
+                showNotification('Please enter username and password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/auth/${currentAuthProvider}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    accessToken = data.access_token;
+                    currentUsername = data.username;
+                    
+                    // Save to session storage
+                    sessionStorage.setItem('blissful_auth', JSON.stringify({
+                        access_token: accessToken,
+                        username: currentUsername,
+                        provider: currentAuthProvider
+                    }));
+
+                    showNotification('✓ Login successful!', 'success');
+                    closeLoginModal();
+                    showAuthenticatedUI();
+                } else {
+                    showNotification('✗ ' + (data.error || 'Login failed'), 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('✗ Login error: ' + error.message, 'error');
+            }
+        }
+
+        function showAuthenticatedUI() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('user-section').classList.remove('hidden');
+            document.getElementById('search-section').classList.remove('hidden');
+            
+            document.getElementById('username').textContent = currentUsername;
+            document.getElementById('auth-provider').textContent = currentAuthProvider;
+            document.getElementById('user-avatar').textContent = currentUsername.charAt(0).toUpperCase();
+        }
+
+        function logout() {
+            accessToken = null;
+            currentUsername = null;
+            currentAuthProvider = null;
+            sessionStorage.removeItem('blissful_auth');
+            
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('hidden');
+            document.getElementById('search-section').classList.add('hidden');
+            document.getElementById('results-section').innerHTML = '';
+            
+            showNotification('Logged out', 'success');
+        }
+
+        function handleSearchKeypress(event) {
+            if (event.key === 'Enter') {
+                searchArtists();
+            }
+        }
+
+        async function searchArtists() {
+            const searchTerm = document.getElementById('search-input').value.trim();
+            
+            if (!searchTerm) {
+                showNotification('Please enter a search term', 'error');
+                return;
+            }
+
+            document.getElementById('loading-section').classList.remove('hidden');
+            document.getElementById('results-section').innerHTML = '';
+
+            try {
+                const response = await fetch('/api/request/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ term: searchTerm })
+                });
+
+                const data = await response.json();
+
+                document.getElementById('loading-section').classList.add('hidden');
+
+                if (data.success && data.results.length > 0) {
+                    displayResults(data.results);
+                } else if (data.results.length === 0) {
+                    document.getElementById('results-section').innerHTML = '<p class="loading">No artists found. Try a different search term.</p>';
+                } else {
+                    showNotification('✗ ' + (data.error || 'Search failed'), 'error');
+                }
+            } catch (error) {
+                document.getElementById('loading-section').classList.add('hidden');
+                console.error('Search error:', error);
+                showNotification('✗ Search error: ' + error.message, 'error');
+            }
+        }
+
+        function displayResults(results) {
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.innerHTML = '';
+
+            results.forEach(artist => {
+                const card = createArtistCard(artist);
+                resultsSection.appendChild(card);
+            });
+        }
+
+        function createArtistCard(artist) {
+            const card = document.createElement('div');
+            card.className = 'artist-card';
+
+            const image = artist.images && artist.images.length > 0 
+                ? artist.images[0].url 
+                : '';
+
+            const genres = artist.genres && artist.genres.length > 0
+                ? artist.genres.slice(0, 3).map(g => `<span class="genre-tag">${g}</span>`).join('')
+                : '<span class="genre-tag">Unknown</span>';
+
+            card.innerHTML = `
+                ${image ? `<img src="${image}" class="artist-image" alt="${artist.artistName}">` : '<div class="artist-image"></div>'}
+                <div class="artist-info">
+                    <div class="artist-name">${artist.artistName}</div>
+                    <div class="artist-details">
+                        ${artist.disambiguation ? artist.disambiguation + '<br>' : ''}
+                        ${artist.statistics ? artist.statistics.albumCount + ' albums' : 'Albums info unavailable'}
+                    </div>
+                    <div class="artist-genres">
+                        ${genres}
+                    </div>
+                    <button class="request-button" onclick='requestArtist(${JSON.stringify(artist).replace(/'/g, "&#39;")})'>
+                        ➕ Request Artist
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        async function requestArtist(artist) {
+            if (!accessToken) {
+                showNotification('Please login first', 'error');
+                return;
+            }
+
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = '⏳ Requesting...';
+
+            try {
+                const response = await fetch('/api/request/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        artist: artist,
+                        monitored: false,
+                        username: currentUsername
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    button.textContent = '✓ Requested!';
+                    button.style.background = '#10b981';
+                    showNotification(`✓ ${artist.artistName} has been requested!`, 'success');
+                    
+                    setTimeout(() => {
+                        button.disabled = true;
+                        button.textContent = '✓ Already Requested';
+                    }, 2000);
+                } else {
+                    button.disabled = false;
+                    button.textContent = '➕ Request Artist';
+                    showNotification('✗ ' + (data.error || 'Request failed'), 'error');
+                }
+            } catch (error) {
+                button.disabled = false;
+                button.textContent = '➕ Request Artist';
+                console.error('Request error:', error);
+                showNotification('✗ Request error: ' + error.message, 'error');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

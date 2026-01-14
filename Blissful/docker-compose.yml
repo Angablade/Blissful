@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  blissful:
+    build: .
+    container_name: blissful
+    ports:
+      - "7373:7373"
+    volumes:
+      # Configuration file (will be created on first run)
+      - ./config.json:/app/config.json
+      
+      # Download directory
+      - ./downloads:/app/downloads
+      
+      # Map to your music directory (adjust this path!)
+      # This should match where Lidarr stores music
+      - /path/to/music:/music
+      
+    environment:
+      # Optional: Change port
+      - PORT=7373
+      
+    restart: unless-stopped
+    
+    # Optional: Add logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Optional: Add Lidarr service if not already running
+# Uncomment below if you want to run Lidarr in Docker too
+#
+#  lidarr:
+#    image: lscr.io/linuxserver/lidarr:latest
+#    container_name: lidarr
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/New_York
+#    volumes:
+#      - ./lidarr/config:/config
+#      - /path/to/music:/music
+#      - /path/to/downloads:/downloads
+#    ports:
+#      - "8686:8686"
+#    restart: unless-stopped
+
+networks:
+  default:
+    name: blissful-network

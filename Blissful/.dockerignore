@@ -1,0 +1,48 @@
+# Docker ignore file for Blissful
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Configuration (will be mounted as volume)
+config.json
+
+# Downloads directory (will be mounted as volume)
+downloads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+test_*.py
+test_config.json
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+temp/

@@ -1,0 +1,166 @@
+﻿<!-- Tab: Request Settings -->
+<div id="request-tab" class="tab-content">
+    <div class="card">
+        <h2>Music Request System</h2>
+        <p class="info-text">
+            Enable users to request new artists to be added to your Lidarr library. Requires authentication via Jellyfin, Emby, or Plex.
+        </p>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="enableRequests" name="enable_requests">
+                Enable Music Request System
+            </label>
+            <small>Allow users to search for and request new artists</small>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="autoMonitorRequests" name="auto_monitor_requests">
+                Auto-Monitor Requested Artists
+            </label>
+            <small>Automatically monitor and search for albums when an artist is requested (recommended: disabled for manual approval)</small>
+        </div>
+
+        <h3>Request Page Access</h3>
+        <div class="info-box" style="background: #e3f2fd; border: 1px solid #2196f3; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <p><strong>📱 Request Page URL:</strong></p>
+            <code id="request-url" style="display: block; background: white; padding: 10px; border-radius: 4px; margin-top: 8px;">http://localhost:7373/request</code>
+            <button type="button" class="btn btn-secondary" onclick="copyRequestUrl()" style="margin-top: 10px;">📋 Copy URL</button>
+        </div>
+    </div>
+
+    <!-- Jellyfin Configuration -->
+    <div class="card">
+        <h2>🔵 Jellyfin Configuration</h2>
+        <p class="info-text">Configure Jellyfin authentication for the request system</p>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="enableJellyfin" name="enable_jellyfin">
+                Enable Jellyfin Authentication
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="jellyfinUrl">Jellyfin Server URL</label>
+            <input type="text" id="jellyfinUrl" name="jellyfin_url" placeholder="https://jellyfin.yourdomain.com">
+            <small>The URL where your Jellyfin server is running</small>
+        </div>
+
+        <div class="form-group">
+            <label for="jellyfinApiKey">Jellyfin API Key (Required)</label>
+            <input type="password" id="jellyfinApiKey" name="jellyfin_api_key" placeholder="Your Jellyfin API Key">
+            <small><strong>Important:</strong> Get this from Jellyfin Dashboard → API Keys. This is required for user authentication to work!</small>
+        </div>
+    </div>
+
+    <!-- Emby Configuration -->
+    <div class="card">
+        <h2>🟢 Emby Configuration</h2>
+        <p class="info-text">Configure Emby authentication for the request system</p>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="enableEmby" name="enable_emby">
+                Enable Emby Authentication
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label for="embyUrl">Emby Server URL</label>
+            <input type="text" id="embyUrl" name="emby_url" placeholder="https://emby.yourdomain.com">
+            <small>The URL where your Emby server is running</small>
+        </div>
+
+        <div class="form-group">
+            <label for="embyApiKey">Emby API Key (Required)</label>
+            <input type="password" id="embyApiKey" name="emby_api_key" placeholder="Your Emby API Key">
+            <small><strong>Important:</strong> Get this from Emby Dashboard → API Keys. Required for authentication!</small>
+        </div>
+    </div>
+
+    <!-- Plex Configuration -->
+    <div class="card">
+        <h2>🟡 Plex Configuration</h2>
+        <p class="info-text">Configure Plex authentication for the request system</p>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="enablePlex" name="enable_plex">
+                Enable Plex Authentication
+            </label>
+        </div>
+
+        <p class="info-text">
+            <strong>Note:</strong> Plex authentication uses plex.tv accounts. No server URL is needed.
+        </p>
+    </div>
+
+    <!-- Request Behavior -->
+    <div class="card">
+        <h3>Request Behavior</h3>
+        
+        <div class="form-group">
+            <label for="requestDefaultMonitored">Default Monitoring Status</label>
+            <select id="requestDefaultMonitored" name="request_default_monitored">
+                <option value="false">Unmonitored (Manual Approval)</option>
+                <option value="true">Monitored (Auto-Download)</option>
+            </select>
+            <small>How requested artists should be added to Lidarr</small>
+        </div>
+
+        <div class="form-group">
+            <label for="requestSearchMissing">Search for Missing Albums</label>
+            <select id="requestSearchMissing" name="request_search_missing">
+                <option value="false">No (Default)</option>
+                <option value="true">Yes (Auto-Search)</option>
+            </select>
+            <small>Whether to automatically search for missing albums when an artist is requested</small>
+        </div>
+    </div>
+
+    <!-- Usage Instructions -->
+    <div class="card">
+        <h3>📖 How It Works</h3>
+        <ol style="line-height: 1.8;">
+            <li><strong>Enable the feature:</strong> Check "Enable Music Request System" above</li>
+            <li><strong>Configure authentication:</strong> Enable at least one media server (Jellyfin, Emby, or Plex)</li>
+            <li><strong>Share the URL:</strong> Give your users the request page URL (shown above)</li>
+            <li><strong>Users login:</strong> Users authenticate with their media server credentials</li>
+            <li><strong>Users search & request:</strong> Users can search for artists and request them</li>
+            <li><strong>Artists are added:</strong> Requested artists are added to Lidarr (unmonitored by default)</li>
+            <li><strong>You approve:</strong> Review requests in Lidarr and enable monitoring/search as needed</li>
+        </ol>
+    </div>
+
+    <!-- Tips -->
+    <div class="card">
+        <h3>💡 Tips</h3>
+        <ul style="line-height: 1.8;">
+            <li><strong>Security:</strong> Users authenticate with their own media server accounts</li>
+            <li><strong>Unmonitored by default:</strong> Prevents automatic downloading of unwanted content</li>
+            <li><strong>Manual approval:</strong> Review requests in Lidarr before enabling monitoring</li>
+            <li><strong>Multiple auth options:</strong> Users can login with Jellyfin, Emby, or Plex</li>
+            <li><strong>No API keys exposed:</strong> The request page doesn't expose Lidarr API keys to users</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Update request URL based on current hostname
+window.addEventListener('load', () => {
+    const requestUrl = `${window.location.protocol}//${window.location.host}/request`;
+    document.getElementById('request-url').textContent = requestUrl;
+});
+
+function copyRequestUrl() {
+    const url = document.getElementById('request-url').textContent;
+    navigator.clipboard.writeText(url).then(() => {
+        showNotification('✓ Request URL copied to clipboard!', 'success');
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        showNotification('Failed to copy URL', 'error');
+    });
+}
+</script>

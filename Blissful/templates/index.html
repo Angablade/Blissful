@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blissful - Lidarr Music Downloader</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- marked.js for markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Blissful</h1>
+            <p class="subtitle">Lidarr Music Downloader Microservice</p>
+        </header>
+
+        <div class="status-bar" id="statusBar">
+            <div class="status-item">
+                <span class="status-label">Service:</span>
+                <span class="status-value" id="serviceStatus">⏳ Checking...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">FFmpeg:</span>
+                <span class="status-value" id="ffmpegStatus">⏳ Checking...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">yt-dlp:</span>
+                <span class="status-value" id="ytdlpStatus">⏳ Checking...</span>
+            </div>
+        </div>
+
+        <!-- Tabbed Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'lidarr-tab')">Lidarr</button>
+            <button class="tab-button" onclick="openTab(event, 'download-tab')">Settings</button>
+            <button class="tab-button" onclick="openTab(event, 'sources-tab')">Sources</button>
+            <button class="tab-button" onclick="openTab(event, 'path-tab')">Mapping</button>
+            <button class="tab-button" onclick="openTab(event, 'request-tab')">Requests</button>
+            <button class="tab-button" onclick="openTab(event, 'tools-tab')">Tools</button>
+            <button class="tab-button" onclick="openTab(event, 'userscript-tab')">Userscript</button>
+            <button class="tab-button" onclick="openTab(event, 'documentation')">Docs</button>
+        </div>
+
+        <!-- Tab Contents -->
+        {% include 'tabs/lidarr_tab.html' %}
+        {% include 'tabs/download_tab.html' %}
+        {% include 'tabs/sources_tab.html' %}
+        {% include 'tabs/path_tab.html' %}
+        {% include 'tabs/request_tab.html' %}
+        {% include 'tabs/tools_tab.html' %}
+        {% include 'tabs/userscript_tab.html' %}
+        {% include 'tabs/documentation_tab.html' %}
+
+        <div class="actions">
+            <button type="button" class="btn btn-primary" onclick="saveConfiguration()">💾 Save All Settings</button>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Created by <a href="https://github.com/angablade/"><strong>Angablade</strong></a></p>
+                <p>Documentation by <strong>Synthia</strong></p>
+                <div class="footer-links">
+                    <a href="https://github.com/angablade/blissful" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript includes -->
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/sources.js"></script>
+    <script src="/static/js/paths.js"></script>
+    <script src="/static/js/documentation.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿<!-- Tab: Path Mapping -->
+<div id="path-tab" class="tab-content">
+    <div class="card">
+        <h2>Path Mapping</h2>
+        <p class="info-text">
+            Map Lidarr's paths to your local paths if they differ (e.g., Docker containers, network shares).
+        </p>
+        <div class="path-mapping-actions">
+            <button type="button" class="btn btn-secondary" onclick="autoPopulatePathMapping()">🔄 Auto-Detect from Lidarr</button>
+            <button type="button" class="btn btn-secondary" onclick="addPathMapping()">+ Add Path Mapping</button>
+        </div>
+        <div id="pathMappings">
+            <!-- Path mappings will be added here dynamically -->
+        </div>
+		<h2>Path Mapping Example</h2>
+        <pre><code>
+		# Sample mapping for Docker
+		/media/music -> /music
+		/media/downloads -> /downloads
+
+		# Sample mapping for network share
+		/media/music -> //NAS/Music
+		/media/downloads -> //NAS/Downloads
+        </code></pre>
+    </div>
+</div>
