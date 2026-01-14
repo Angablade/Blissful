@@ -92,9 +92,17 @@
             </label>
         </div>
 
-        <p class="info-text">
-            <strong>Note:</strong> Plex authentication uses plex.tv accounts. No server URL is needed.
-        </p>
+        <div class="form-group">
+            <label for="plexUrl">Plex Server URL (Required)</label>
+            <input type="text" id="plexUrl" name="plex_url" placeholder="http://192.168.1.100:32400 or https://plex.yourdomain.com">
+            <small><strong>Important:</strong> Enter your Plex server URL to verify users have access to YOUR server. Users must have access to this server to login.</small>
+        </div>
+
+        <div class="info-box" style="background: #fff3e0; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <p><strong>⚠️ Security Note:</strong></p>
+            <p>The server URL is used to verify that users have permission to access YOUR specific Plex server, not just any Plex account.</p>
+            <p><strong>Find your Plex URL:</strong> Settings → Network → Server address (e.g., http://192.168.1.100:32400)</p>
+        </div>
     </div>
 
     <!-- Request Behavior -->

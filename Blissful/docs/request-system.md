@@ -99,20 +99,25 @@ Same as Jellyfin:
 ```
 User → Username + Password → Plex.tv
 Plex.tv → Validates → Returns Token
+Blissful → Verifies Server Access → Checks user has permission
 User → Authenticated! ✅
 ```
 
 **Configuration:**
 ```json
 {
-  "enable_plex": true
+  "enable_plex": true,
+  "plex_url": "http://192.168.1.100:32400"
 }
 ```
 
 **Benefits:**
 - ✅ No API key needed
-- ✅ Works with any Plex account
+- ✅ **Verifies server access** - Only users with permission to YOUR server
 - ✅ Simple setup
+- ✅ **Secure** - Prevents unauthorized access
+
+**Important:** You must configure your Plex server URL to verify users have access to YOUR specific server, not just any Plex account.
 
 ---
 

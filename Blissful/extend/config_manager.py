@@ -79,6 +79,7 @@ class ConfigManager:
             'emby_url': '',
             'emby_api_key': '',
             'enable_plex': False,
+            'plex_url': '',
             'request_default_monitored': False,
             'request_search_missing': False
         }
@@ -223,6 +224,9 @@ class ConfigManager:
         
         if 'enable_plex' in config:
             validated['enable_plex'] = bool(config['enable_plex'])
+        
+        if 'plex_url' in config:
+            validated['plex_url'] = str(config['plex_url']).rstrip('/')
         
         if 'request_default_monitored' in config:
             validated['request_default_monitored'] = bool(config['request_default_monitored'])

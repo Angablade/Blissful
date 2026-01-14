@@ -132,6 +132,7 @@ async function loadConfiguration() {
         document.getElementById('embyUrl').value = config.emby_url || '';
         document.getElementById('embyApiKey').value = config.emby_api_key || '';
         document.getElementById('enablePlex').checked = config.enable_plex || false;
+        document.getElementById('plexUrl').value = config.plex_url || '';
         document.getElementById('requestDefaultMonitored').value = config.request_default_monitored || 'false';
         document.getElementById('requestSearchMissing').value = config.request_search_missing || 'false';
         
@@ -182,6 +183,7 @@ async function saveConfiguration() {
             emby_url: document.getElementById('embyUrl').value,
             emby_api_key: document.getElementById('embyApiKey').value,
             enable_plex: document.getElementById('enablePlex').checked,
+            plex_url: document.getElementById('plexUrl').value,
             request_default_monitored: document.getElementById('requestDefaultMonitored').value === 'true',
             request_search_missing: document.getElementById('requestSearchMissing').value === 'true'
         };

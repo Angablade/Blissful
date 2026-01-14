@@ -263,7 +263,7 @@ class AuthManager:
     
     def authenticate_plex(self, username, password):
         """
-        Authenticate with Plex
+        Authenticate with Plex and verify server access
         
         Args:
             username: User's Plex username
@@ -273,7 +273,19 @@ class AuthManager:
             dict: Authentication result with success status and user data
         """
         try:
+            config = self.config_manager.get_config()
+            plex_server_url = config.get('plex_url', '').strip()
+            
             logger.info(f"Attempting Plex authentication for user: {username}")
+            logger.info(f"Plex server URL: {plex_server_url}")
+            
+            # Validate configuration
+            if not plex_server_url:
+                return {
+                    'success': False,
+                    'error': 'Plex server URL not configured. Contact admin.',
+                    'status_code': 400
+                }
             
             if not username or not password:
                 return {
@@ -282,7 +294,7 @@ class AuthManager:
                     'status_code': 400
                 }
             
-            # Authenticate with Plex
+            # Step 1: Authenticate with Plex.tv
             auth_url = "https://plex.tv/users/sign_in.json"
             
             headers = {
@@ -299,25 +311,143 @@ class AuthManager:
             
             response = req.post(auth_url, data=payload, headers=headers, timeout=10)
             
-            if response.status_code == 201:
-                auth_data = response.json()
-                user_data = auth_data.get('user', {})
-                
-                logger.info(f"✅ Plex authentication successful for user: {username}")
-                
-                return {
-                    'success': True,
-                    'access_token': user_data.get('authToken'),
-                    'username': user_data.get('username'),
-                    'user_id': user_data.get('id'),
-                    'status_code': 200
-                }
-            else:
+            if response.status_code != 201:
                 logger.warning(f"❌ Plex authentication failed for user: {username}")
                 return {
                     'success': False,
                     'error': 'Invalid username or password',
                     'status_code': 401
+                }
+            
+            auth_data = response.json()
+            user_data = auth_data.get('user', {})
+            user_auth_token = user_data.get('authToken')
+            
+            if not user_auth_token:
+                return {
+                    'success': False,
+                    'error': 'Failed to get user auth token',
+                    'status_code': 500
+                }
+            
+            logger.info(f"✅ Plex.tv authentication successful for user: {username}")
+            
+            # Step 2: Verify user has access to the configured Plex server
+            logger.info(f"Verifying server access for {username}...")
+            
+            try:
+                # Get user's accessible servers from Plex.tv
+                # Use the older v2/resources endpoint with proper parameters
+                servers_url = "https://plex.tv/api/v2/resources?includeHttps=1&includeRelay=1"
+                servers_headers = {
+                    'X-Plex-Token': user_auth_token,
+                    'Accept': 'application/json',
+                    'X-Plex-Client-Identifier': 'blissful-web',
+                    'X-Plex-Product': 'Blissful',
+                    'X-Plex-Version': '1.0.0'
+                }
+                
+                servers_response = req.get(servers_url, headers=servers_headers, timeout=10)
+                
+                logger.info(f"Plex servers API response status: {servers_response.status_code}")
+                
+                if servers_response.status_code != 200:
+                    logger.error(f"Failed to get user's servers: {servers_response.status_code}")
+                    logger.error(f"Response body: {servers_response.text[:500]}")
+                    return {
+                        'success': False,
+                        'error': 'Could not verify server access',
+                        'status_code': 500
+                    }
+                
+                servers = servers_response.json()
+                logger.info(f"Found {len(servers)} servers for user {username}")
+                
+                # Extract server identifier from configured URL
+                # plex_server_url could be like "http://192.168.1.100:32400" or "https://plex.example.com"
+                configured_host = plex_server_url.split('://')[-1].split(':')[0].lower()
+                configured_port = '32400'  # Default Plex port
+                if ':' in plex_server_url.split('://')[-1]:
+                    configured_port = plex_server_url.split(':')[-1].split('/')[0]
+                
+                logger.info(f"Looking for server matching host: {configured_host}, port: {configured_port}")
+                
+                # Check if user has access to a server matching our configuration
+                has_access = False
+                server_name = None
+                matched_server = None
+                
+                for server in servers:
+                    # Only check actual Plex Media Servers (not players or other devices)
+                    if server.get('provides') != 'server':
+                        continue
+                    
+                    server_name_check = server.get('name', '')
+                    connections = server.get('connections', [])
+                    
+                    logger.info(f"Checking server: {server_name_check} with {len(connections)} connections")
+                    
+                    for conn in connections:
+                        conn_uri = conn.get('uri', '').lower()
+                        conn_address = conn.get('address', '').lower()
+                        conn_local = conn.get('local', False)
+                        
+                        logger.debug(f"  Connection: {conn_uri} (address: {conn_address}, local: {conn_local})")
+                        
+                        # Check if this connection matches our configured server
+                        # Match by host/address
+                        if configured_host in conn_uri or configured_host in conn_address:
+                            has_access = True
+                            server_name = server_name_check
+                            matched_server = server
+                            logger.info(f"✅ Match found! Server: {server_name}, Connection: {conn_uri}")
+                            break
+                        
+                        # Also try matching the full URL
+                        if plex_server_url.lower() in conn_uri:
+                            has_access = True
+                            server_name = server_name_check
+                            matched_server = server
+                            logger.info(f"✅ Match found by full URL! Server: {server_name}")
+                            break
+                    
+                    if has_access:
+                        break
+                
+                if not has_access:
+                    logger.warning(f"❌ User {username} does not have access to the configured Plex server")
+                    logger.warning(f"Configured: {plex_server_url}")
+                    logger.warning(f"User has access to {len([s for s in servers if s.get('provides') == 'server'])} server(s)")
+                    return {
+                        'success': False,
+                        'error': 'You do not have access to this Plex server. Contact the administrator.',
+                        'status_code': 403
+                    }
+                
+                logger.info(f"✅ User {username} verified to have access to server: {server_name}")
+                
+                return {
+                    'success': True,
+                    'access_token': user_auth_token,
+                    'username': user_data.get('username'),
+                    'user_id': user_data.get('id'),
+                    'server_name': server_name,
+                    'status_code': 200
+                }
+                
+            except req.exceptions.Timeout:
+                logger.error(f"Timeout checking Plex server access")
+                return {
+                    'success': False,
+                    'error': 'Timeout verifying server access',
+                    'status_code': 504
+                }
+            except req.exceptions.ConnectionError as e:
+                logger.error(f"Cannot connect to Plex: {e}")
+                return {
+                    'success': False,
+                    'error': 'Cannot connect to Plex servers',
+                    'status_code': 503
                 }
                 
         except Exception as e:
