@@ -43,6 +43,7 @@
     <Folder Include="docs\" />
     <Folder Include="downloads\" />
     <Folder Include="extend\" />
+    <Folder Include="promo\" />
     <Folder Include="static\" />
     <Folder Include="static\js\" />
     <Folder Include="templates\" />
@@ -59,6 +60,10 @@
     <Content Include="docs\request-system.md" />
     <Content Include="docs\troubleshooting.md" />
     <Content Include="downloads\.gitkeep" />
+    <Content Include="promo\blissful.mp4" />
+    <Content Include="promo\draganddrop.mp4" />
+    <Content Include="promo\lidarr.mp4" />
+    <Content Include="promo\requestspage.png" />
     <Content Include="README.md" />
     <Content Include="requirements.txt" />
     <Content Include="start.bat" />

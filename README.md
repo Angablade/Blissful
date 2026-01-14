@@ -8,6 +8,45 @@ A powerful microservice that automatically downloads missing music tracks for yo
 
 ---
 
+## 📸 Screenshots & Videos
+
+### 🎬 Demo Videos
+
+<table>
+  <tr>
+    <td width="50%">
+      <h4>Blissful Interface Overview</h4>
+      <a href="Blissful/promo/blissful.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>Complete walkthrough of the Blissful interface and features</i></p>
+    </td>
+    <td width="50%">
+      <h4>Lidarr Integration Demo</h4>
+      <a href="Blissful/promo/lidarr.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>See how Blissful integrates seamlessly with Lidarr</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>Drag & Drop Source Priority</h4>
+      <a href="Blissful/promo/draganddrop.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>Easily customize download source priorities</i></p>
+    </td>
+    <td width="50%">
+      <h4>Request System</h4>
+      <img src="Blissful/promo/requestspage.png" alt="Request Page Screenshot" width="100%">
+      <p><i>User-friendly request page for music requests</i></p>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## ✨ Features
 
 - 🎵 **Automatic Music Downloads** - Download missing tracks from YouTube, SoundCloud, Bandcamp, and more

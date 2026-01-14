@@ -2,6 +2,51 @@
 
 Welcome to **Blissful**, your intelligent music downloader and request system for Lidarr!
 
+---
+
+## 📸 Screenshots & Videos
+
+### 🎬 See Blissful in Action
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <h4>🎵 Full Interface Demo</h4>
+      <a href="../promo/blissful.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <br>
+      <i>Complete walkthrough of all features</i>
+    </td>
+    <td align="center" width="50%">
+      <h4>🔗 Lidarr Integration</h4>
+      <a href="../promo/lidarr.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <br>
+      <i>Seamless integration with Lidarr</i>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <h4>🎯 Drag & Drop Sources</h4>
+      <a href="../promo/draganddrop.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <br>
+      <i>Easy source priority management</i>
+    </td>
+    <td align="center" width="50%">
+      <h4>🎵 Request System</h4>
+      <img src="../promo/requestspage.png" alt="Request System" width="90%">
+      <br>
+      <i>Beautiful request page interface</i>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 📖 What is Blissful?
 
 Blissful is a powerful microservice that bridges the gap between your music library (Lidarr) and various download sources. It enables:
