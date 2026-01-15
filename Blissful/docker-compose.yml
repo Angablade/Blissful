@@ -18,35 +18,39 @@ services:
       - /path/to/music:/music
       
     environment:
-      # Optional: Change port
+      # Application port
       - PORT=7373
+      
+      # Optional: Lidarr connection (can also be set in web UI)
+      # - LIDARR_URL=http://lidarr:8686
+      # - LIDARR_API_KEY=your-api-key-here
+      
+      # Optional: Request system (can also be set in web UI)
+      # - JELLYFIN_URL=https://jellyfin.example.com
+      # - JELLYFIN_API_KEY=your-jellyfin-api-key
+      # - EMBY_URL=https://emby.example.com
+      # - EMBY_API_KEY=your-emby-api-key
+      # - PLEX_URL=http://192.168.1.100:32400
+      
+      # Python unbuffered for better logging
+      - PYTHONUNBUFFERED=1
       
     restart: unless-stopped
     
-    # Optional: Add logging
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:7373/api/health\", timeout=5)' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      retries: 3
+    
+    # Logging configuration
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-
-# Optional: Add Lidarr service if not already running
-# Uncomment below if you want to run Lidarr in Docker too
-#
-#  lidarr:
-#    image: lscr.io/linuxserver/lidarr:latest
-#    container_name: lidarr
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#      - TZ=America/New_York
-#    volumes:
-#      - ./lidarr/config:/config
-#      - /path/to/music:/music
-#      - /path/to/downloads:/downloads
-#    ports:
-#      - "8686:8686"
-#    restart: unless-stopped
 
 networks:
   default:

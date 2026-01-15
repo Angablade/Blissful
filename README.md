@@ -281,7 +281,7 @@ Contributions are welcome! Here's how you can help:
 ## 🙏 Credits
 
 **Created by:** [Angablade](https://github.com/angablade)  
-**Documentation by:** Synthia
+**Documentation by:** Synthia (Angablade's personal AI assistant)
 
 ### Built With:
 - [Flask](https://flask.palletsprojects.com/) - Web framework

@@ -19,15 +19,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY Blissful.py .
-COPY config_manager.py .
-COPY lidarr_client.py .
-COPY download_manager.py .
-COPY audio_converter.py .
+COPY extend/ ./extend/
 COPY templates/ ./templates/
 COPY static/ ./static/
+COPY docs/ ./docs/
 
-# Create directories for downloads
-RUN mkdir -p downloads/temp
+# Create directories for downloads and config
+RUN mkdir -p downloads/temp config
 
 # Expose port
 EXPOSE 7373
@@ -35,6 +33,10 @@ EXPOSE 7373
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:7373/api/health', timeout=5)" || exit 1
+
+# Set environment variables
+ENV PORT=7373 \
+    PYTHONUNBUFFERED=1
 
 # Run the application
 CMD ["python", "Blissful.py"]
