@@ -2,7 +2,12 @@ version: '3.8'
 
 services:
   blissful:
-    build: .
+    # Official Docker image
+    image: angablade/blissful:latest
+    
+    # To build from source instead, comment above and uncomment below:
+    # build: .
+    
     container_name: blissful
     ports:
       - "7373:7373"
@@ -51,6 +56,46 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+# Optional: Add Lidarr service if not already running
+# Uncomment below if you want to run Lidarr in Docker too
+#
+#  lidarr:
+#    image: lscr.io/linuxserver/lidarr:latest
+#    container_name: lidarr
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/New_York
+#    volumes:
+#      - ./lidarr/config:/config
+#      - /path/to/music:/music
+#      - /path/to/downloads:/downloads
+#    ports:
+#      - "8686:8686"
+#    restart: unless-stopped
+#    networks:
+#      - blissful-network
+
+# Optional: Add Jellyfin service
+# Uncomment if you want to run Jellyfin in Docker
+#
+#  jellyfin:
+#    image: jellyfin/jellyfin:latest
+#    container_name: jellyfin
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/New_York
+#    volumes:
+#      - ./jellyfin/config:/config
+#      - ./jellyfin/cache:/cache
+#      - /path/to/music:/music:ro
+#    ports:
+#      - "8096:8096"
+#    restart: unless-stopped
+#    networks:
+#      - blissful-network
 
 networks:
   default:

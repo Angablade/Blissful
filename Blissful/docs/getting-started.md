@@ -36,19 +36,44 @@ pip install -r requirements.txt
 python run.py
 ```
 
-### **Method 2: Docker Installation**
+### **Method 2: Docker Installation (Recommended)**
+
+**Official Docker Image:** `angablade/blissful:latest`
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/angablade/blissful.git
-cd blissful
+# Quick start with official image
+docker run -d \
+  --name blissful \
+  -p 7373:7373 \
+  -v $(pwd)/config.json:/app/config.json \
+  -v $(pwd)/downloads:/app/downloads \
+  angablade/blissful:latest
 
-# 2. Start with Docker Compose
+# Or use Docker Compose
+# 1. Create docker-compose.yml (see example below)
+# 2. Run:
 docker-compose up -d
 
 # 3. View logs
 docker-compose logs -f blissful
 ```
+
+**Example docker-compose.yml:**
+```yaml
+version: '3.8'
+services:
+  blissful:
+    image: angablade/blissful:latest
+    container_name: blissful
+    ports:
+      - "7373:7373"
+    volumes:
+      - ./config.json:/app/config.json
+      - ./downloads:/app/downloads
+    restart: unless-stopped
+```
+
+**Access:** http://localhost:7373
 
 ### **Method 3: Windows Quick Start**
 

@@ -1,255 +1,323 @@
 ﻿# 🎵 Blissful - Lidarr Music Downloader
 
-Welcome to **Blissful**, your intelligent music downloader and request system for Lidarr!
+A powerful microservice that automatically downloads missing music tracks for your Lidarr library using YouTube, SoundCloud, and 1000+ other sources.
+
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Python](https://img.shields.io/badge/python-3.8+-green.svg)
+![License](https://img.shields.io/badge/license-Unlicense-blue.svg)
+![Docker](https://img.shields.io/badge/docker-angablade%2Fblissful-blue?logo=docker)
 
 ---
 
 ## 📸 Screenshots & Videos
 
-### 🎬 See Blissful in Action
+### 🎬 Demo Videos
 
 <table>
   <tr>
-    <td align="center" width="50%">
-      <h4>🎵 Full Interface Demo</h4>
+    <td width="50%">
+      <h4>Blissful Interface Overview</h4>
       <a href="../promo/blissful.mp4">
-        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
       </a>
-      <br>
-      <i>Complete walkthrough of all features</i>
+      <p><i>Complete walkthrough of the Blissful interface and features</i></p>
     </td>
-    <td align="center" width="50%">
-      <h4>🔗 Lidarr Integration</h4>
+    <td width="50%">
+      <h4>Lidarr Integration Demo</h4>
       <a href="../promo/lidarr.mp4">
-        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
       </a>
-      <br>
-      <i>Seamless integration with Lidarr</i>
+      <p><i>See how Blissful integrates seamlessly with Lidarr</i></p>
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
-      <h4>🎯 Drag & Drop Sources</h4>
+    <td width="50%">
+      <h4>Drag & Drop Source Priority</h4>
       <a href="../promo/draganddrop.mp4">
-        <img src="https://img.shields.io/badge/▶️-Watch_Video-6366f1?style=for-the-badge" alt="Watch Demo">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
       </a>
-      <br>
-      <i>Easy source priority management</i>
+      <p><i>Easily customize download source priorities</i></p>
     </td>
-    <td align="center" width="50%">
-      <h4>🎵 Request System</h4>
-      <img src="../promo/requestspage.png" alt="Request System" width="90%">
-      <br>
-      <i>Beautiful request page interface</i>
+    <td width="50%">
+      <h4>Request System</h4>
+      <img src="../promo/requestspage.png" alt="Request Page Screenshot" width="100%">
+      <p><i>User-friendly request page for music requests</i></p>
     </td>
   </tr>
 </table>
 
 ---
 
-## 📖 What is Blissful?
+## ✨ Features
 
-Blissful is a powerful microservice that bridges the gap between your music library (Lidarr) and various download sources. It enables:
-
-- 🎵 **Automated Music Downloads** - Download tracks from YouTube, SoundCloud, and 1000+ sources
-- 🎯 **Music Request System** - Let users request artists via Jellyfin/Emby authentication
-- 🔄 **Lidarr Integration** - Seamless integration with your existing Lidarr setup
-- 🎨 **User-Friendly Interface** - Clean web interface for configuration and management
-- 🔌 **Browser Extension** - Userscript for downloading directly from Lidarr
-
----
-
-## ✨ Key Features
-
-### **For Administrators:**
-- ⚙️ Easy configuration through web interface
-- 🔑 Secure authentication with Jellyfin/Emby/Plex
-- 📊 Source management (1000+ supported sites)
-- 🎚️ Quality control (format, bitrate, conversion)
-- 🗂️ Path mapping for remote servers
-- 🐳 Docker support included
-
-### **For Users:**
-- 🎵 Request artists to be added to library
-- 🔍 Search across music platforms
-- 📱 Simple authentication (username + password)
-- 🎉 No API keys required for users
-
-### **Technical Features:**
-- 🏗️ Modular architecture (easy to maintain)
-- 🔒 Secure (admin API keys, user authentication)
-- 🚀 Fast (yt-dlp powered downloads)
-- 🎵 High quality (configurable audio formats)
-- 🔄 Auto-conversion (MP3, FLAC, M4A, etc.)
+- 🎵 **Automatic Music Downloads** - Download missing tracks from YouTube, SoundCloud, Bandcamp, and more
+- 🔄 **Lidarr Integration** - Seamlessly integrates with your existing Lidarr setup
+- 🎯 **High Quality Audio** - Configurable quality settings (up to 320kbps)
+- 🔌 **Browser Userscript** - One-click downloads directly from Lidarr's web interface
+- 👥 **Request System** - Let users request artists via Jellyfin/Emby/Plex authentication
+- 🎛️ **Audio Processing** - Normalization, format conversion, metadata embedding
+- 🗺️ **Path Mapping** - Support for remote/Docker Lidarr instances
+- 🔍 **Source Priorities** - Configure preferred download sources
 
 ---
 
 ## 🚀 Quick Start
 
-### **1. Installation**
+### Prerequisites
+
+- Python 3.8 or higher
+- FFmpeg (for audio conversion)
+- Lidarr (running and accessible)
+
+### Installation
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/angablade/blissful.git
 cd blissful
 
-# Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# Start the application
+# 3. Start Blissful
 python run.py
 ```
 
-### **2. Configure Lidarr**
+The application will start on **http://localhost:7373**
 
-1. Open Blissful: `http://localhost:7373`
-2. Go to **Lidarr** tab
-3. Enter your Lidarr URL and API key
-4. Click **Test Connection**
+---
 
-### **3. Enable Requests (Optional)**
+## ⚙️ Configuration
 
-1. Go to **Requests** tab
-2. Enable **Music Request System**
-3. Configure Jellyfin/Emby authentication
-4. Save settings
+1. **Open the web interface:** http://localhost:7373
+2. **Configure Lidarr:**
+   - Go to the **Lidarr** tab
+   - Enter your Lidarr URL and API key
+   - Click **Test Connection**
+3. **Configure Download Settings:**
+   - Go to the **Settings** tab
+   - Choose your preferred format (MP3, FLAC, etc.)
+   - Set quality (128k - 320k)
+4. **Save your settings!**
 
-### **4. Download Music**
+---
 
-**Option A - Via Userscript:**
-1. Go to **Userscript** tab
-2. Download and install the userscript
-3. Visit your Lidarr album page
-4. Click **Download Missing Tracks**
+## 🎬 Using the Userscript
 
-**Option B - Via API:**
+### Install the Userscript
+
+1. Install a userscript manager:
+   - [Tampermonkey](https://www.tampermonkey.net/) (Chrome, Firefox, Edge, Safari)
+   - [Greasemonkey](https://www.greasespot.net/) (Firefox)
+
+2. In Blissful, go to the **Userscript** tab
+3. Click **Download Userscript**
+4. Your userscript manager will open - click **Install**
+
+### Using It
+
+1. Go to any album page in Lidarr
+2. You'll see 🎵 icons next to missing tracks
+3. Click an icon to download that track
+4. Blissful handles the rest automatically!
+
+---
+
+## 🐳 Docker
+
+### Quick Start with Docker (Recommended)
+
+**Official Docker Image:** `angablade/blissful:latest`
+
 ```bash
-curl -X POST http://localhost:7373/api/download-track \
-  -H "Content-Type: application/json" \
-  -d '{"artist": "Metallica", "title": "Enter Sandman"}'
+# Pull and run the official image
+docker run -d \
+  --name blissful \
+  -p 7373:7373 \
+  -v $(pwd)/config.json:/app/config.json \
+  -v $(pwd)/downloads:/app/downloads \
+  angablade/blissful:latest
+```
+
+### Docker Compose
+
+```bash
+# Download docker-compose.yml from the repository
+# Or use this configuration:
+
+version: '3.8'
+services:
+  blissful:
+    image: angablade/blissful:latest
+    container_name: blissful
+    ports:
+      - "7373:7373"
+    volumes:
+      - ./config.json:/app/config.json
+      - ./downloads:/app/downloads
+    restart: unless-stopped
+
+# Start the container
+docker-compose up -d
+
+# View logs
+docker-compose logs -f blissful
+```
+
+### Build from Source (Optional)
+
+```bash
+# Clone and build locally
+git clone https://github.com/angablade/blissful.git
+cd blissful
+
+# Build the image
+docker build -t blissful .
+
+# Run the container
+docker run -d -p 7373:7373 \
+  -v $(pwd)/config.json:/app/config.json \
+  -v $(pwd)/downloads:/app/downloads \
+  --name blissful \
+  blissful
 ```
 
 ---
 
 ## 📚 Documentation
 
-| Guide | Description |
-|-------|-------------|
-| **[Getting Started](#!/documentation?doc=getting-started)** | Installation, setup, and first steps |
-| **[Configuration](#!/documentation?doc=configuration)** | Detailed configuration guide |
-| **[Request System](#!/documentation?doc=request-system)** | Setting up music requests |
-| **[Troubleshooting](#!/documentation?doc=troubleshooting)** | Common issues and solutions |
+Comprehensive documentation is available in the **Docs** tab of the web interface:
+
+- **📋 Overview** - Introduction and features
+- **🚀 Getting Started** - Detailed installation guide
+- **⚙️ Configuration** - Advanced settings and options
+- **🎵 Request System** - Setting up user requests
+- **🔧 Troubleshooting** - Common issues and solutions
 
 ---
 
 ## 🎯 Use Cases
 
-### **Scenario 1: Home Server**
-You run Lidarr at home and want to fill missing tracks from your collection:
-- Configure Blissful with your Lidarr setup
-- Install the userscript
-- One-click download missing tracks
+### Home Media Server
+Download missing tracks from your music collection automatically.
 
-### **Scenario 2: Multi-User Setup**
-You have multiple users accessing your Plex/Jellyfin server:
-- Enable the request system
-- Users can request artists
-- Artists are added to Lidarr (unmonitored for approval)
+### Multi-User Setup
+Allow family/friends to request artists via Jellyfin/Emby authentication.
 
-### **Scenario 3: Remote Server**
-Your Lidarr runs on a remote server:
-- Configure path mapping
-- Downloads are automatically placed in correct folders
-- Lidarr picks them up immediately
+### Remote Server
+Use path mapping to handle Lidarr running on a different machine or Docker.
 
 ---
 
-## 🏗️ Architecture
+## 🛠️ Technology Stack
+
+- **Backend:** Flask (Python)
+- **Download Engine:** yt-dlp
+- **Audio Processing:** FFmpeg
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Markdown Rendering:** marked.js
+
+---
+
+## 📁 Project Structure
 
 ```
-┌─────────────────────────────────────────────────┐
-│              Web Interface                      │
-│  (Configuration, Requests, Management)          │
-└─────────────────┬───────────────────────────────┘
-                  │
-┌─────────────────▼───────────────────────────────┐
-│          Blissful Core (Flask)                  │
-│  ┌───────────┐  ┌───────────┐  ┌────────────┐ │
-│  │ Auth      │  │ Request   │  │  Download  │ │
-│  │ Manager   │  │ Manager   │  │  Manager   │ │
-│  └───────────┘  └───────────┘  └────────────┘ │
-└─────────────────┬───────────────────────────────┘
-                  │
-    ┌─────────────┼─────────────┬─────────────┐
-    │             │             │             │
-┌───▼────┐  ┌────▼─────┐  ┌───▼──────┐  ┌──▼──────┐
-│Lidarr  │  │yt-dlp    │  │Jellyfin/ │  │Sources  │
-│API     │  │(1000+    │  │Emby/Plex │  │(YouTube,│
-│        │  │sources)  │  │Auth      │  │etc)     │
-└────────┘  └──────────┘  └──────────┘  └─────────┘
+Blissful/
+├── Blissful.py           # Main application
+├── extend/               # Modular managers
+│   ├── config_manager.py
+│   ├── download_manager.py
+│   ├── lidarr_client.py
+│   ├── auth_manager.py
+│   └── ...
+├── templates/            # HTML templates
+│   └── tabs/            # Tab components
+├── static/              # Static assets
+│   ├── css/
+│   ├── js/
+│   └── lidarr-userscript.user.js
+├── docs/                # Documentation
+├── downloads/           # Download directory
+└── config.json         # Configuration file
 ```
 
 ---
 
-## 🔧 Requirements
+## ⚡ API Endpoints
 
-### **System Requirements:**
-- Python 3.8 or higher
-- 2GB RAM minimum
-- 10GB disk space (for downloads)
-- Internet connection
-
-### **Software Requirements:**
-- Lidarr (v1.0+)
-- FFmpeg (for audio conversion)
-- yt-dlp (installed automatically)
-
-### **Optional:**
-- Docker & Docker Compose
-- Jellyfin/Emby/Plex (for request system)
-- Web browser with userscript support
-
----
-
-## 🐳 Docker Deployment
-
+### Download Track
 ```bash
-# Using Docker Compose
-docker-compose up -d
+POST /api/download-track
+Content-Type: application/json
 
-# Manual Docker
-docker build -t blissful .
-docker run -d -p 7373:7373 \
-  -v $(pwd)/config:/app/config \
-  -v $(pwd)/downloads:/app/downloads \
-  blissful
+{
+  "artist": "Metallica",
+  "title": "Enter Sandman",
+  "album": "Metallica"
+}
+```
+
+### Download Album
+```bash
+POST /api/download-album
+Content-Type: application/json
+
+{
+  "artist": "Metallica",
+  "album": "Metallica",
+  "tracks": [
+    {"title": "Enter Sandman"},
+    {"title": "Sad But True"}
+  ]
+}
+```
+
+### Health Check
+```bash
+GET /api/health
+```
+
+---
+
+## 🔧 Configuration File
+
+The `config.json` file stores all your settings:
+
+```json
+{
+  "lidarr_url": "http://localhost:8686",
+  "lidarr_api_key": "your-api-key",
+  "output_format": "mp3",
+  "quality": "320k",
+  "enable_requests": true,
+  "source_priorities": [
+    "soundcloud",
+    "youtube-music",
+    "youtube",
+    "bandcamp"
+  ]
+}
 ```
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
+Contributions are welcome! Here's how you can help:
 
 1. 🐛 **Report bugs** - Open an issue with details
 2. 💡 **Suggest features** - Share your ideas
-3. 📝 **Improve docs** - Help make them better
-4. 🔧 **Submit PRs** - Fix bugs or add features
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+3. 📝 **Improve documentation** - Help make it better
+4. 🔧 **Submit pull requests** - Fix bugs or add features
 
 ---
 
 ## 🙏 Credits
 
-**Created by:** Angablade  
-**Documentation by:** Synthia
+**Created by:** [Angablade](https://github.com/angablade)  
+**Documentation by:** Synthia (Angablade's personal AI assistant)
 
-### **Built With:**
+### Built With:
 - [Flask](https://flask.palletsprojects.com/) - Web framework
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) - Download engine
 - [FFmpeg](https://ffmpeg.org/) - Audio conversion
@@ -259,21 +327,20 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Support
 
-Need help? Here's where to get support:
+Need help?
 
-- 📖 **Documentation** - Check other guides in this tab
-- 🐛 **Issues** - GitHub Issues for bug reports
-- 💬 **Discussions** - GitHub Discussions for questions
-- 📧 **Email** - Contact the developer
-
----
-
-## 🎉 Thank You!
-
-Thank you for using Blissful! We hope it makes managing your music library easier and more enjoyable.
-
-**Happy listening!** 🎵
+- 📖 **Documentation** - Check the Docs tab in the web interface
+- 🐛 **Bug Reports** - [Open an issue](https://github.com/angablade/blissful/issues)
+- 💬 **Discussions** - [GitHub Discussions](https://github.com/angablade/blissful/discussions)
 
 ---
 
-*Last updated: January 2026*
+## 📄 License
+
+This project is released into the **public domain** using [The Unlicense](https://unlicense.org/).
+
+You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+
+See the [UNLICENSE](UNLICENSE) file for details.
+
+**TL;DR:** Do whatever you want with this code. No warranty, no liability, no strings attached.

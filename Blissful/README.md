@@ -5,6 +5,46 @@ A powerful microservice that automatically downloads missing music tracks for yo
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-green.svg)
 ![License](https://img.shields.io/badge/license-Unlicense-blue.svg)
+![Docker](https://img.shields.io/badge/docker-angablade%2Fblissful-blue?logo=docker)
+
+---
+
+## 📸 Screenshots & Videos
+
+### 🎬 Demo Videos
+
+<table>
+  <tr>
+    <td width="50%">
+      <h4>Blissful Interface Overview</h4>
+      <a href="promo/blissful.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>Complete walkthrough of the Blissful interface and features</i></p>
+    </td>
+    <td width="50%">
+      <h4>Lidarr Integration Demo</h4>
+      <a href="promo/lidarr.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>See how Blissful integrates seamlessly with Lidarr</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>Drag & Drop Source Priority</h4>
+      <a href="promo/draganddrop.mp4">
+        <img src="https://img.shields.io/badge/▶️-Watch_Demo-blue?style=for-the-badge" alt="Watch Demo">
+      </a>
+      <p><i>Easily customize download source priorities</i></p>
+    </td>
+    <td width="50%">
+      <h4>Request System</h4>
+      <img src="promo/requestspage.png" alt="Request Page Screenshot" width="100%">
+      <p><i>User-friendly request page for music requests</i></p>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -85,9 +125,38 @@ The application will start on **http://localhost:7373**
 
 ## 🐳 Docker
 
-### Quick Start with Docker Compose
+### Quick Start with Docker (Recommended)
+
+**Official Docker Image:** `angablade/blissful:latest`
 
 ```bash
+# Pull and run the official image
+docker run -d \
+  --name blissful \
+  -p 7373:7373 \
+  -v $(pwd)/config.json:/app/config.json \
+  -v $(pwd)/downloads:/app/downloads \
+  angablade/blissful:latest
+```
+
+### Docker Compose
+
+```bash
+# Download docker-compose.yml from the repository
+# Or use this configuration:
+
+version: '3.8'
+services:
+  blissful:
+    image: angablade/blissful:latest
+    container_name: blissful
+    ports:
+      - "7373:7373"
+    volumes:
+      - ./config.json:/app/config.json
+      - ./downloads:/app/downloads
+    restart: unless-stopped
+
 # Start the container
 docker-compose up -d
 
@@ -95,9 +164,13 @@ docker-compose up -d
 docker-compose logs -f blissful
 ```
 
-### Manual Docker
+### Build from Source (Optional)
 
 ```bash
+# Clone and build locally
+git clone https://github.com/angablade/blissful.git
+cd blissful
+
 # Build the image
 docker build -t blissful .
 
