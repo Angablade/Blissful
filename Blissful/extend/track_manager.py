@@ -127,35 +127,39 @@ class TrackManager:
                 logger.warning("No artist path found, keeping file in downloads")
                 return converted_file
             
-            # Build target path
+            # Normalize artist path to use forward slashes
+            artist_path = artist_path.replace('\\', '/')
+            
+            # Build target path with forward slashes
             safe_album = self.download_manager._sanitize_filename(album_title)
             safe_title = self.download_manager._sanitize_filename(title)
             track_num_str = str(track_number).zfill(2)
             filename = f"{track_num_str} - {safe_title}.{output_format}"
             
-            target_dir = Path(artist_path) / safe_album
-            target_path = target_dir / filename
+            # Construct path using forward slashes
+            target_path = f"{artist_path}/{safe_album}/{filename}"
             
-            logger.info(f"Organizing track to: {target_path}")
+            logger.info(f"Target path (before mapping): {target_path}")
             
-            # Move file to target location
+            # Move file to target location with path mapping
             if config.get('lidarr_path_mapping'):
                 final_path = self.download_manager.move_to_target(
                     source_file=converted_file,
-                    target_path=str(target_path),
+                    target_path=target_path,
                     path_mapping=config.get('lidarr_path_mapping')
                 )
             else:
-                # Direct move (no path mapping)
-                target_dir.mkdir(parents=True, exist_ok=True)
-                shutil.move(converted_file, str(target_path))
-                final_path = str(target_path)
+                # Direct move (no path mapping) - use Path for platform compatibility
+                target = Path(target_path)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(converted_file, str(target))
+                final_path = str(target)
                 logger.info(f"Moved file to: {final_path}")
             
             return final_path
             
         except Exception as e:
-            logger.warning(f"Failed to organize file to Lidarr path: {e}")
+            logger.warning(f"Failed to organize file to Lidarr path: {e}", exc_info=True)
             return converted_file
     
     def _trigger_lidarr_rescan(self, album_id):

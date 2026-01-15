@@ -1,4 +1,4 @@
-import yt_dlp
+﻿import yt_dlp
 import os
 import logging
 import shutil
@@ -367,27 +367,39 @@ class DownloadManager:
         try:
             source = Path(source_file)
             
+            # Normalize target path to use forward slashes (cross-platform)
+            target_path = target_path.replace('\\', '/')
+            
             # Apply path mapping if provided
             if path_mapping:
                 for micro_path, lidarr_path in path_mapping.items():
-                    if target_path.startswith(lidarr_path):
+                    # Normalize both paths for comparison
+                    micro_path_norm = micro_path.replace('\\', '/')
+                    lidarr_path_norm = lidarr_path.replace('\\', '/')
+                    target_path_norm = target_path.replace('\\', '/')
+                    
+                    if target_path_norm.startswith(lidarr_path_norm):
                         # Replace Lidarr path with microservice path
-                        target_path = target_path.replace(lidarr_path, micro_path, 1)
+                        target_path = target_path_norm.replace(lidarr_path_norm, micro_path_norm, 1)
+                        logger.info(f"Path mapping applied: {lidarr_path_norm} -> {micro_path_norm}")
                         break
             
+            # Convert to Path object (handles platform-specific separators)
             target = Path(target_path)
             
             # Create target directory if it doesn't exist
             target.parent.mkdir(parents=True, exist_ok=True)
             
+            logger.info(f"Moving file from {source} to {target}")
+            
             # Move file
             shutil.move(str(source), str(target))
             
-            logger.info(f"Moved file to: {target}")
+            logger.info(f"✅ Successfully moved file to: {target}")
             return str(target)
             
         except Exception as e:
-            logger.error(f"Error moving file to target: {e}")
+            logger.error(f"❌ Error moving file to target: {e}", exc_info=True)
             # Return source path if move failed
             return source_file
     
